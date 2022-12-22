@@ -1,0 +1,194 @@
+
+begin:constant
+
+L = 4.986207832757884
+B0 = 2.1
+n0e = 1.0e19
+wwave = 1.8105500960812256e9
+kwave = -241.94169586213042
+B0x = 0.0
+B0y = 0.0
+B0z = 2.0
+B1x_cos = 0.0
+B1x_sin = -0.0
+B1y_cos = -0.0
+B1y_sin = 0.0
+B1z_cos = 0.0
+B1z_sin = 0.0
+E1x_cos = 0.0
+E1x_sin = -0.0
+E1y_cos = 0.0
+E1y_sin = -0.0
+E1z_cos = -0.0
+E1z_sin = 0.0
+J1x_cos = -0.0
+J1x_sin = -0.0
+J1y_cos = 0.0
+J1y_sin = -0.0
+J1z_cos = -0.0
+J1z_sin = -0.0
+p1ex_cos = 0.0
+p1ex_sin = -0.0
+p1ey_cos = -0.0
+p1ey_sin = 0.0
+p1ez_cos = 0.0
+p1ez_sin = 0.0
+p1ix_cos = -0.0
+p1ix_sin = -0.0
+p1iy_cos = -0.0
+p1iy_sin = -0.0
+p1iz_cos = 0.0
+p1iz_sin = 0.0
+n1ex_cos = -0.0
+n1ex_sin = 0.0
+n1ix_cos = 0.0
+n1ix_sin = 0.0
+
+  zi=1
+  ze=0-1
+  n0i=n0e/zi
+  mioverme=1836.0*2
+  mpoverme=1836.0
+  mi=mioverme*me
+  Te_eV=1000
+  Ti_eV=1000
+
+  wci=za*qe*B0/mi
+  tci=2*pi/wci
+
+  t_final=5.0*tci
+  dt_snap=t_final/1023
+  nfull=nint(tca/dt_snap)
+
+end:constant
+
+begin:control
+  #size of domain
+  x_min=0
+  x_max=L
+
+  #global number of gridpoints
+  nx=4096 #in x
+  npart=nx*256
+
+  nsteps=-1
+  t_end=t_final
+  dt_multiplier=0.95
+end:control
+
+begin:output
+  use_offset_grid=F
+  dt_snapshot=dt_snap
+  dt_average=dt_snap
+  nstep_average=1
+  full_dump_every=nfull
+
+  restart_dump_every=-1
+  force_final_to_be_restartable=T
+
+#Properties at particle positions
+  particles=full
+  px=full
+  py=full
+  pz=full
+  vx=full
+  vy=full
+  vz=full
+  charge=full
+  mass=full
+  particle_weight=full
+  species_id=full
+
+#Properties on grid
+  grid=always 
+  ex=always + average + snapshot
+  ey=always + average + snapshot
+  ez=always + average + snapshot
+  bx=always + average + snapshot
+  by=always + average + snapshot
+  bz=always + average + snapshot
+  jx=always + average + snapshot
+  jy=always + average + snapshot
+  jz=always + average + snapshot
+  ekbar=always + species + average + snapshot
+  mass_density=never+species + average + snapshot
+  charge_density=always + average + snapshot
+  number_density=always+species + average + snapshot
+  temperature=always+species
+
+  #extended io
+  particle_probes=never
+  distribution_functions=always
+end:output
+
+begin:fields
+  ex=E1x_cos*cos(kwave*x) + E1x_sin*sin(kwave*x)
+  ey=E1y_cos*cos(kwave*x) + E1y_sin*sin(kwave*x)
+  ez=E1z_cos*cos(kwave*x) + E1z_sin*sin(kwave*x)
+  bx=B0x + B1x_cos*cos(kwave*x) + B1x_sin*sin(kwave*x)
+  by=B0y + B1y_cos*cos(kwave*x) + B1y_sin*sin(kwave*x)
+  bz=B0z + B1z_cos*cos(kwave*x) + B1z_sin*sin(kwave*x)
+  jx=J1x_cos*cos(kwave*x) + J1x_sin*sin(kwave*x)
+  jy=J1y_cos*cos(kwave*x) + J1y_sin*sin(kwave*x)
+  jz=J1z_cos*cos(kwave*x) + J1z_sin*sin(kwave*x)
+end:fields
+
+begin:boundaries
+  bc_x_min_field=periodic
+  bc_x_max_field=periodic
+  bc_x_min_particle=periodic
+  bc_x_max_particle=periodic
+end:boundaries
+
+begin:species
+  name=Electron
+  charge=-1.0
+  mass=1.0
+  frac=1/2
+  dump=F
+  tracer=F
+  temp_ev=Te_eV
+  rho=n0e + n1ex_cos*cos(kwave*x) + n1ex_sin*sin(kwave*x)
+  drift_x=p1ex_cos*cos(kwave*x) + p1ex_sin*sin(kwave*x)
+  drift_y=p1ey_cos*cos(kwave*x) + p1ey_sin*sin(kwave*x)
+  drift_z=p1ez_cos*cos(kwave*x) + p1ez_sin*sin(kwave*x)
+  drift_para=0
+  drift_perp1=0  
+  drift_perp2=0  
+end:species
+
+begin:species
+  name=Deuteron
+  charge=zi
+  mass=mioverme
+  frac=1/2
+  dump=F
+  tracer=F
+  temp_ev=Ti_eV
+  rho=n0i + n1ix_cos*cos(kwave*x) + n1ix_sin*sin(kwave*x)
+  drift_x=p1ix_cos*cos(kwave*x) + p1ix_sin*sin(kwave*x)
+  drift_y=p1iy_cos*cos(kwave*x) + p1iy_sin*sin(kwave*x)
+  drift_z=p1iz_cos*cos(kwave*x) + p1iz_sin*sin(kwave*x)
+  drift_para=0
+  drift_perp1=0  
+  drift_perp2=0  
+end:species
+
+begin:dist_fn
+    name=x_px
+    ndims=2
+    dumpmask=always
+    direction1 = dir_x
+    direction2 = dir_px
+    # range is ignored for spatial coordinates
+    range1 = (1,1)
+    range2 = (0,0)
+    # resolution is ignored for spatial coordinates
+    resolution1 = 1
+    resolution2 = 30
+    include_species:Electron
+    include_species:Deuteron
+end:dist_fn
+
+
+               
