@@ -1,6 +1,7 @@
 *prefix.deck
 .ipynb_checkpoints/
 **.sdf
+input.deck
 deck.status
 epoch1d.dat
 full.visit
