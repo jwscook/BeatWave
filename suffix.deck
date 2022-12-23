@@ -11,9 +11,10 @@
   wci=zi*qe*B0/mi
   tci=2*pi/wci
 
-  t_final=5.0*tci
-  dt_snap=t_final/1023
+  t_final=8.0*tci
+  dt_snap=t_final/16383
   nfull=nint(tci/dt_snap)
+
 
 end:constant
 
@@ -24,11 +25,13 @@ begin:control
 
   #global number of gridpoints
   nx=NG #in x
-  npart=nx*256
+  npart=nx*16
 
   nsteps=-1
   t_end=t_final
   dt_multiplier=0.95
+
+  n_zeros=5
 end:control
 
 begin:output
