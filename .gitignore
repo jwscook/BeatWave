@@ -1,0 +1,7 @@
+*prefix.deck
+.ipynb_checkpoints/
+**.sdf
+deck.status
+epoch1d.dat
+full.visit
+normal.visit
