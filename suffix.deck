@@ -107,7 +107,7 @@ begin:species
   frac=1/2
   dump=F
   temp_ev=Te_eV
-  rho=n0e + nx1e_cos*cos(k1*x) + nx1e_sin*sin(k1*x) + nx2e_cos*cos(k2*x) + nx2e_sin*sin(k2*x)
+  rho=n0+ nx1e_cos*cos(k1*x) + nx1e_sin*sin(k1*x) + nx2e_cos*cos(k2*x) + nx2e_sin*sin(k2*x)
   drift_x=Px1e_cos*cos(k1*x) + Px1e_sin*sin(k1*x) + Px2e_cos*cos(k2*x) + Px2e_sin*sin(k2*x)
   drift_y=Py1e_cos*cos(k1*x) + Py1e_sin*sin(k1*x) + Py2e_cos*cos(k2*x) + Py2e_sin*sin(k2*x)
   drift_z=Pz1e_cos*cos(k1*x) + Pz1e_sin*sin(k1*x) + Pz2e_cos*cos(k2*x) + Pz2e_sin*sin(k2*x)
@@ -120,7 +120,7 @@ begin:species
   frac=1/2
   dump=F
   temp_ev=Ti_eV
-  rho=n0e + nx1i_cos*cos(k1*x) + nx1i_sin*sin(k1*x) + nx2i_cos*cos(k2*x) + nx2i_sin*sin(k2*x)
+  rho=n0+ nx1i_cos*cos(k1*x) + nx1i_sin*sin(k1*x) + nx2i_cos*cos(k2*x) + nx2i_sin*sin(k2*x)
   drift_x=Px1i_cos*cos(k1*x) + Px1i_sin*sin(k1*x) + Px2i_cos*cos(k2*x) + Px2i_sin*sin(k2*x)
   drift_y=Py1i_cos*cos(k1*x) + Py1i_sin*sin(k1*x) + Py2i_cos*cos(k2*x) + Py2i_sin*sin(k2*x)
   drift_z=Pz1i_cos*cos(k1*x) + Pz1i_sin*sin(k1*x) + Pz2i_cos*cos(k2*x) + Pz2i_sin*sin(k2*x)
