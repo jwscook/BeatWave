@@ -1,6 +1,11 @@
 #!/bin/bash
 
-datestub=$(date +%Y-%m-%d-%H-%M-%S)
+if [ -z "$1" ]
+  then
+    datestub=$(date +%Y-%m-%d-%H-%M-%S)
+else
+    datestub=$1
+fi
 
 mkdir -p $datestub
 mkdir -p $datestub/null

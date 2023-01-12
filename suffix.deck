@@ -1,18 +1,16 @@
 
 
-  zi=1
-  ze=0-1
-  n0i=n0e/zi
+  n0i=n0e
   mioverme=1836.0*2
   mi=mioverme*me
   Ti_eV=10000
   pimax = 10 * sqrt(qe * Ti_eV * mi / 2)
 
-  wci=zi*qe*B0/mi
+  wci=qe*B0/mi
   tci=2*pi/wci
 
-  t_final=8.0*tci
-  dt_snap=t_final/16383
+  t_final=1.0*tci
+  dt_snap=t_final/8191
   nfull=nint(tci/dt_snap)
 
 
@@ -73,6 +71,10 @@ begin:output
   charge_density=always + average + snapshot
   number_density=always+species + average + snapshot
   temperature=always+species
+  average_particle_energy=always + species + snapshot
+  particle_energy_flux=always + species + snapshot
+  poynting_flux=always + snapshot
+  total_energy_sum=always + snapshot
 
   #extended io
   particle_probes=never
@@ -113,15 +115,15 @@ end:species
 
 begin:species
   name=Ion
-  charge=zi
+  charge=1
   mass=mioverme
   frac=1/2
   dump=F
   temp_ev=Ti_eV
-  rho=n0i
-  drift_x=0
-  drift_y=0
-  drift_z=0
+  rho=n0e + nx1i_cos*cos(k1*x) + nx1i_sin*sin(k1*x) + nx2i_cos*cos(k2*x) + nx2i_sin*sin(k2*x)
+  drift_x=Px1i_cos*cos(k1*x) + Px1i_sin*sin(k1*x) + Px2i_cos*cos(k2*x) + Px2i_sin*sin(k2*x)
+  drift_y=Py1i_cos*cos(k1*x) + Py1i_sin*sin(k1*x) + Py2i_cos*cos(k2*x) + Py2i_sin*sin(k2*x)
+  drift_z=Pz1i_cos*cos(k1*x) + Pz1i_sin*sin(k1*x) + Pz2i_cos*cos(k2*x) + Pz2i_sin*sin(k2*x)
 end:species
 
 begin:dist_fn
