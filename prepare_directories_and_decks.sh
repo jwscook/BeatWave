@@ -2,19 +2,19 @@
 
 if [ -z "$1" ]
   then
-    datestub=$(date +%Y-%m-%d-%H-%M-%S)
+    dirname=$(date +%Y-%m-%d-%H-%M-%S)
 else
-    datestub=$1
+    dirname=$1
 fi
 
-mkdir -p $datestub
-mkdir -p $datestub/null
-mkdir -p $datestub/wave1
-mkdir -p $datestub/wave2
-mkdir -p $datestub/both
+mkdir -p $dirname
+mkdir -p $dirname/null
+mkdir -p $dirname/wave1
+mkdir -p $dirname/wave2
+mkdir -p $dirname/both
 for i in null wave1 wave2 both
 do
-  cat $i.prefix.deck suffix.deck > $datestub/$i/input.deck
+  cat $i.prefix.deck suffix.deck > $dirname/$i/input.deck
 done
 
 # Run via e.g.

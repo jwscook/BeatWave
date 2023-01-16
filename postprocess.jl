@@ -1,7 +1,9 @@
+NT = 2^9
+
+
 using Plots, FFTW, PyCall
 
 sdf = pyimport("sdf")
-NT = 2^9
 F = zeros(8192, NT);
 
 for i in 0:size(F, 2)-1
@@ -10,8 +12,9 @@ for i in 0:size(F, 2)-1
 end
 
 filt = sin.(((1:size(F,2)) .- 0.5) ./ size(F,2) .* pi)';
+heatmap(F[1:end÷8, :])
 
-heatmap(log10.(abs.((fft(F .* filt))[1:32, 1:end÷2]))')
+# heatmap(log10.(abs.((fft(F .* filt))[1:32, 1:end÷2]))')
 
 
 

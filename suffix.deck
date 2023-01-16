@@ -1,15 +1,12 @@
 
 
-  n0i=n0e
-  mioverme=1836.0*2
   mi=mioverme*me
-  Ti_eV=10000
   pimax = 10 * sqrt(qe * Ti_eV * mi / 2)
 
   wci=qe*B0/mi
   tci=2*pi/wci
 
-  t_final=1.0*tci
+  t_final=0.01*tci
   dt_snap=t_final/8191
   nfull=nint(tci/dt_snap)
 
@@ -23,7 +20,7 @@ begin:control
 
   #global number of gridpoints
   nx=NG #in x
-  npart=nx*16
+  npart=nx*512
 
   nsteps=-1
   t_end=t_final
@@ -66,11 +63,9 @@ begin:output
   jx=always + average + snapshot
   jy=always + average + snapshot
   jz=always + average + snapshot
-  ekbar=always + species + average + snapshot
-  mass_density=never+species + average + snapshot
-  charge_density=always + average + snapshot
-  number_density=always+species + average + snapshot
-  temperature=always+species
+  ekbar=always + species + average
+  charge_density=always + species + average
+  temperature=always+species + average
   average_particle_energy=always + species + snapshot
   particle_energy_flux=always + species + snapshot
   poynting_flux=always + snapshot
