@@ -6,7 +6,7 @@
   wci=qe*B0/mi
   tci=2*pi/wci
 
-  t_final=0.01*tci
+  t_final=1.0*tci
   dt_snap=t_final/8191
   nfull=nint(tci/dt_snap)
 
@@ -20,7 +20,7 @@ begin:control
 
   #global number of gridpoints
   nx=NG #in x
-  npart=nx*512
+  npart=nx*2048
 
   nsteps=-1
   t_end=t_final
@@ -77,15 +77,15 @@ begin:output
 end:output
 
 begin:fields
-  ex=Ex1_cos*cos(k1*x) + Ex1_sin*sin(k1*x) + Ex2_cos*cos(k2*x) + Ex2_sin*sin(k2*x)
-  ey=Ey1_cos*cos(k1*x) + Ey1_sin*sin(k1*x) + Ey2_cos*cos(k2*x) + Ey2_sin*sin(k2*x)
-  ez=Ez1_cos*cos(k1*x) + Ez1_sin*sin(k1*x) + Ez2_cos*cos(k2*x) + Ez2_sin*sin(k2*x)
-  bx=Bx1_cos*cos(k1*x) + Bx1_sin*sin(k1*x) + Bx2_cos*cos(k2*x) + Bx2_sin*sin(k2*x)
-  by=By1_cos*cos(k1*x) + By1_sin*sin(k1*x) + By2_cos*cos(k2*x) + By2_sin*sin(k2*x)
-  bz=Bz1_cos*cos(k1*x) + Bz1_sin*sin(k1*x) + Bz2_cos*cos(k2*x) + Bz2_sin*sin(k2*x) + B0 
-  jx=Jx1_cos*cos(k1*x) + Jx1_sin*sin(k1*x) + Jx2_cos*cos(k2*x) + Jx2_sin*sin(k2*x)
-  jy=Jy1_cos*cos(k1*x) + Jy1_sin*sin(k1*x) + Jy2_cos*cos(k2*x) + Jy2_sin*sin(k2*x)
-  jz=Jz1_cos*cos(k1*x) + Jz1_sin*sin(k1*x) + Jz2_cos*cos(k2*x) + Jz2_sin*sin(k2*x)
+  ex=E1x_cos*cos(k1*x) + E1x_sin*sin(k1*x) + E2x_cos*cos(k2*x) + E2x_sin*sin(k2*x)
+  ey=E1y_cos*cos(k1*x) + E1y_sin*sin(k1*x) + E2y_cos*cos(k2*x) + E2y_sin*sin(k2*x)
+  ez=E1z_cos*cos(k1*x) + E1z_sin*sin(k1*x) + E2z_cos*cos(k2*x) + E2z_sin*sin(k2*x)
+  bx=B1x_cos*cos(k1*x) + B1x_sin*sin(k1*x) + B2x_cos*cos(k2*x) + B2x_sin*sin(k2*x)
+  by=B1y_cos*cos(k1*x) + B1y_sin*sin(k1*x) + B2y_cos*cos(k2*x) + B2y_sin*sin(k2*x)
+  bz=B1z_cos*cos(k1*x) + B1z_sin*sin(k1*x) + B2z_cos*cos(k2*x) + B2z_sin*sin(k2*x) + B0 
+  jx=J1x_cos*cos(k1*x) + J1x_sin*sin(k1*x) + J2x_cos*cos(k2*x) + J2x_sin*sin(k2*x)
+  jy=J1y_cos*cos(k1*x) + J1y_sin*sin(k1*x) + J2y_cos*cos(k2*x) + J2y_sin*sin(k2*x)
+  jz=J1z_cos*cos(k1*x) + J1z_sin*sin(k1*x) + J2z_cos*cos(k2*x) + J2z_sin*sin(k2*x)
 end:fields
 
 begin:boundaries
@@ -102,10 +102,10 @@ begin:species
   frac=1/2
   dump=F
   temp_ev=Te_eV
-  rho=n0+ nx1e_cos*cos(k1*x) + nx1e_sin*sin(k1*x) + nx2e_cos*cos(k2*x) + nx2e_sin*sin(k2*x)
-  drift_x=Px1e_cos*cos(k1*x) + Px1e_sin*sin(k1*x) + Px2e_cos*cos(k2*x) + Px2e_sin*sin(k2*x)
-  drift_y=Py1e_cos*cos(k1*x) + Py1e_sin*sin(k1*x) + Py2e_cos*cos(k2*x) + Py2e_sin*sin(k2*x)
-  drift_z=Pz1e_cos*cos(k1*x) + Pz1e_sin*sin(k1*x) + Pz2e_cos*cos(k2*x) + Pz2e_sin*sin(k2*x)
+  rho=n0+ ne1x_cos*cos(k1*x) + ne1x_sin*sin(k1*x) + ne2x_cos*cos(k2*x) + ne2x_sin*sin(k2*x)
+  drift_x=Pe1x_cos*cos(k1*x) + Pe1x_sin*sin(k1*x) + Pe2x_cos*cos(k2*x) + Pe2x_sin*sin(k2*x)
+  drift_y=Pe1y_cos*cos(k1*x) + Pe1y_sin*sin(k1*x) + Pe2y_cos*cos(k2*x) + Pe2y_sin*sin(k2*x)
+  drift_z=Pe1z_cos*cos(k1*x) + Pe1z_sin*sin(k1*x) + Pe2z_cos*cos(k2*x) + Pe2z_sin*sin(k2*x)
 end:species
 
 begin:species
@@ -115,10 +115,10 @@ begin:species
   frac=1/2
   dump=F
   temp_ev=Ti_eV
-  rho=n0+ nx1i_cos*cos(k1*x) + nx1i_sin*sin(k1*x) + nx2i_cos*cos(k2*x) + nx2i_sin*sin(k2*x)
-  drift_x=Px1i_cos*cos(k1*x) + Px1i_sin*sin(k1*x) + Px2i_cos*cos(k2*x) + Px2i_sin*sin(k2*x)
-  drift_y=Py1i_cos*cos(k1*x) + Py1i_sin*sin(k1*x) + Py2i_cos*cos(k2*x) + Py2i_sin*sin(k2*x)
-  drift_z=Pz1i_cos*cos(k1*x) + Pz1i_sin*sin(k1*x) + Pz2i_cos*cos(k2*x) + Pz2i_sin*sin(k2*x)
+  rho=n0+ ni1x_cos*cos(k1*x) + ni1x_sin*sin(k1*x) + ni2x_cos*cos(k2*x) + ni2x_sin*sin(k2*x)
+  drift_x=Pi1x_cos*cos(k1*x) + Pi1x_sin*sin(k1*x) + Pi2x_cos*cos(k2*x) + Pi2x_sin*sin(k2*x)
+  drift_y=Pi1y_cos*cos(k1*x) + Pi1y_sin*sin(k1*x) + Pi2y_cos*cos(k2*x) + Pi2y_sin*sin(k2*x)
+  drift_z=Pi1z_cos*cos(k1*x) + Pi1z_sin*sin(k1*x) + Pi2z_cos*cos(k2*x) + Pi2z_sin*sin(k2*x)
 end:species
 
 begin:dist_fn
