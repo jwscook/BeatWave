@@ -7,7 +7,7 @@
   tci=2*pi/wci
   tw1=2*pi/w1
 
-  t_final=ceil(0.01*tci / tw1) * tw1
+  t_final=ceil(1.0*tci / tw1) * tw1
 
   dt_snap=t_final/1023
   nfull=nint(tci/dt_snap)
@@ -22,7 +22,7 @@ begin:control
 
   #global number of gridpoints
   nx=NG #in x
-  npart=nx*128
+  npart=nx*512
 
   nsteps=-1
   t_end=t_final
@@ -65,11 +65,10 @@ begin:output
   jx=always + average + snapshot
   jy=always + average + snapshot
   jz=always + average + snapshot
-  ekbar=always + species + average
-  charge_density=always + species + average
-  temperature=always+species + average
-  average_particle_energy=always + species + snapshot
-  particle_energy_flux=always + species + snapshot
+  average_particle_energy=always + species + no_sum
+  charge_density=always + average + species + no_sum
+  temperature=always + average + species + no_sum
+  particle_energy_flux=always + snapshot + species + no_sum
   poynting_flux=always + snapshot
   total_energy_sum=always + snapshot
 
@@ -102,7 +101,7 @@ begin:species
   charge=-1.0
   mass=1.0
   frac=1/2
-  dump=F
+  dump=T
   temp_ev=Te_eV
   rho=n0+ ne1x_cos*cos(k1*x) + ne1x_sin*sin(k1*x) + ne2x_cos*cos(k2*x) + ne2x_sin*sin(k2*x)
   drift_x=Pe1x_cos*cos(k1*x) + Pe1x_sin*sin(k1*x) + Pe2x_cos*cos(k2*x) + Pe2x_sin*sin(k2*x)
@@ -115,7 +114,7 @@ begin:species
   charge=1
   mass=mioverme
   frac=1/2
-  dump=F
+  dump=T
   temp_ev=Ti_eV
   rho=n0+ ni1x_cos*cos(k1*x) + ni1x_sin*sin(k1*x) + ni2x_cos*cos(k2*x) + ni2x_sin*sin(k2*x)
   drift_x=Pi1x_cos*cos(k1*x) + Pi1x_sin*sin(k1*x) + Pi2x_cos*cos(k2*x) + Pi2x_sin*sin(k2*x)
