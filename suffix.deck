@@ -8,8 +8,9 @@
   tw1=2*pi/w1
 
   t_final=ceil(1.0*tci / tw1) * tw1
-
-  dt_snap_early=32*tw1/1023
+  
+  t_final_early=32*tw1
+  dt_snap_early=t_final_early/1023
 
   dt_snap_global=t_final/1023
   nfull=nint(tci/dt_snap_global)
@@ -37,7 +38,7 @@ end:control
 begin:output
   name = early
   file_prefix=early
-  time_stop = 32*tw1
+  time_stop = t_final_early
 
   use_offset_grid=F
   dt_snapshot=dt_snap_early
