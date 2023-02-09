@@ -35,6 +35,7 @@ end:control
 begin:output
   name = early
   file_prefix=early
+  time_stop = 32*tw1
 
   use_offset_grid=F
   dt_snapshot=dt_snap_early
@@ -74,31 +75,30 @@ begin:output
   distribution_functions=never
 end:output
 
-begin:output # the "global" output control
-  name = global
+begin:output_global
 
   use_offset_grid=F
   dt_snapshot=dt_snap_global
   dt_average=dt_snap_global
   nstep_average=1
-#  full_dump_every=nfull
+  full_dump_every=nfull
 
-#  restart_dump_every=-1
-#  force_final_to_be_restartable=T
+  restart_dump_every=-1
+  force_final_to_be_restartable=T
 
 #Properties at particle positions
 
-#  particles=full
-#  px=full
-#  py=full
-#  pz=full
-#  vx=full
-#  vy=full
-#  vz=full
-#  charge=full
-#  mass=full
-#  particle_weight=full
-#  species_id=full
+  particles=full
+  px=full
+  py=full
+  pz=full
+  vx=full
+  vy=full
+  vz=full
+  charge=full
+  mass=full
+  particle_weight=full
+  species_id=full
 
 #Properties on grid
   grid=always 
