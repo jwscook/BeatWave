@@ -30,6 +30,8 @@ begin:control
   dt_multiplier=0.95
 
   n_zeros=5
+
+  print_constants=T
 end:control
 
 begin:output
@@ -75,30 +77,31 @@ begin:output
   distribution_functions=never
 end:output
 
-begin:output_global
+begin:output
+  name = global
 
   use_offset_grid=F
   dt_snapshot=dt_snap_global
   dt_average=dt_snap_global
   nstep_average=1
-  full_dump_every=nfull
 
-  restart_dump_every=-1
-  force_final_to_be_restartable=T
+#  full_dump_every=nfull
+#  restart_dump_every=-1
+#  force_final_to_be_restartable=T
 
 #Properties at particle positions
 
-  particles=full
-  px=full
-  py=full
-  pz=full
-  vx=full
-  vy=full
-  vz=full
-  charge=full
-  mass=full
-  particle_weight=full
-  species_id=full
+  particles=never
+  px=never
+  py=never
+  pz=never
+  vx=never
+  vy=never
+  vz=never
+  charge=never
+  mass=never
+  particle_weight=never
+  species_id=never
 
 #Properties on grid
   grid=always 
