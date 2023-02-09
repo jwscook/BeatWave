@@ -9,9 +9,10 @@
 
   t_final=ceil(1.0*tci / tw1) * tw1
 
-  dt_snap=t_final/1023
-  nfull=nint(tci/dt_snap)
+  dt_snap_early=32*tw1/1023
 
+  dt_snap_global=t_final/1023
+  nfull=nint(tci/dt_snap_global)
 
 end:constant
 
@@ -32,48 +33,92 @@ begin:control
 end:control
 
 begin:output
-  use_offset_grid=F
-  dt_snapshot=dt_snap
-  dt_average=dt_snap
-  nstep_average=1
-  full_dump_every=nfull
+  name = early
+  file_prefix=early
 
-  restart_dump_every=-1
-  force_final_to_be_restartable=T
+  use_offset_grid=F
+  dt_snapshot=dt_snap_early
+  dt_average=dt_snap_early
+  nstep_average=1
 
 #Properties at particle positions
-  particles=full
-  px=full
-  py=full
-  pz=full
-  vx=full
-  vy=full
-  vz=full
-  charge=full
-  mass=full
-  particle_weight=full
-  species_id=full
+
+  particles=never
+  px=never
+  py=never
+  pz=never
+  vx=never
+  vy=never
+  vz=never
+  charge=never
+  mass=never
+  particle_weight=never
+  species_id=never
 
 #Properties on grid
   grid=always 
-  ex=always + average + snapshot
-  ey=always + average + snapshot
-  ez=always + average + snapshot
-  bx=always + average + snapshot
-  by=always + average + snapshot
-  bz=always + average + snapshot
-  jx=always + average + snapshot
-  jy=always + average + snapshot
-  jz=always + average + snapshot
+  ex=average + snapshot
+  ey=average + snapshot
+  ez=average + snapshot
+  bx=average + snapshot
+  by=average + snapshot
+  bz=average + snapshot
+  jx=average + snapshot + species
+  jy=average + snapshot + species
+  jz=average + snapshot + species
+  charge_density=average + snapshot + species + no_sum
+  poynting_flux=average + snapshot
+  total_energy_sum=always + snapshot
+
+  #extended io
+  distribution_functions=never
+end:output
+
+begin:output # the "global" output control
+  name = global
+
+  use_offset_grid=F
+  dt_snapshot=dt_snap_global
+  dt_average=dt_snap_global
+  nstep_average=1
+#  full_dump_every=nfull
+
+#  restart_dump_every=-1
+#  force_final_to_be_restartable=T
+
+#Properties at particle positions
+
+#  particles=full
+#  px=full
+#  py=full
+#  pz=full
+#  vx=full
+#  vy=full
+#  vz=full
+#  charge=full
+#  mass=full
+#  particle_weight=full
+#  species_id=full
+
+#Properties on grid
+  grid=always 
+  ex=snapshot
+  ey=snapshot
+  ez=snapshot
+  bx=snapshot
+  by=snapshot
+  bz=snapshot
+  jx=snapshot
+  jy=snapshot
+  jz=snapshot
   average_particle_energy=always + species + no_sum
-  charge_density=always + average + species + no_sum
-  temperature=always + average + species + no_sum
+  charge_density=always + snapshot + species + no_sum
+  temperature=always + snapshot + species + no_sum
   particle_energy_flux=always + snapshot + species + no_sum
   poynting_flux=always + snapshot
   total_energy_sum=always + snapshot
 
   #extended io
-  particle_probes=never
   distribution_functions=always
 end:output
 
