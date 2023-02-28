@@ -11,6 +11,7 @@ for suffix in ("null", "wave1", "wave2", "both")
   sdf = pyimport("sdf")
   h = sdf.read(dir * lpad(0, 5, "0") * ".sdf")
   Ex0 = h.Electric_Field_Ex_averaged.data
+  Bz0 = mean(h.Magnetic_Field_Bz_averaged.data)
   NG = length(Ex0)
   F = zeros(NG, NT);
   fEx(h) = h.Electric_Field_Ex_averaged.data
@@ -39,10 +40,13 @@ for suffix in ("null", "wave1", "wave2", "both")
   subtractinitialvalue!(energydensityions)
   subtractinitialvalue!(energydensityfields)
   energydensitytotal = energydensityelectrons + energydensityions + energydensityfields
-  plot(energydensityelectrons, label="e")
-  plot!(energydensityions, label="i")
-  plot!(energydensityfields, label="f")
-  plot!(energydensitytotal, label="t")
+  E0 = Bz0^2 / 2 / (4e-7π)
+  plot(energydensityelectrons / E0, label="electrons")
+  plot!(energydensityions / E0, label="ions")
+  plot!(energydensityfields / E0, label="fields")
+  plot!(energydensitytotal / E0, label="total")
+  xlabel!("Time [arb]")
+  ylabel!("Energy density change [<B>^2 / 2 mu0]")
   savefig(dir * "energydensities.png")
 
 
@@ -59,7 +63,9 @@ for suffix in ("null", "wave1", "wave2", "both")
     filt = sin.(((1:size(F,2)) .- 0.5) ./ size(F,2) .* pi)';
 
     heatmap(F)
-    savefig(dir * str *"_TX.png")
+    xlabel!("Time [arb]")
+    ylabel!("Position [arb]")
+    savefig(dir * str * "_TX.png")
 
     Ffilt = F .* filt
     nplt = 128 # number modes to plot int time / freq
@@ -68,6 +74,8 @@ for suffix in ("null", "wave1", "wave2", "both")
     # transpose to plot omega against k, log and abs for contrast
     Z = log10.(abs.(reverse(fftshift(fft(Ffilt .- mean(Ffilt)))', dims=1)))
     heatmap(-nplx:nplx, 0:nplt, Z[(end÷2):(end÷2 + nplt), (end÷2-nplx+1):(end÷2+nplx+1)])
+    xlabel!("Wavenumber [pixel number]")
+    ylabel!("Frequency [pixel number]")
     savefig(dir * str * "_WK.png")
   end
 end
