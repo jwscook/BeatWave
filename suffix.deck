@@ -33,6 +33,7 @@ begin:control
   n_zeros=5
 
   print_constants=T
+  smooth_currents=T
 end:control
 
 begin:output
