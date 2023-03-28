@@ -7,7 +7,7 @@
   tci=2*pi/wci
   tw1=2*pi/w1
 
-  t_final=ceil(1.0*tci / tw1) * tw1
+  t_final=ceil(10.0*tci / tw1) * tw1
 
   dt_snap=t_final/1023
   nfull=nint(tci/dt_snap)
@@ -22,7 +22,7 @@ begin:control
 
   #global number of gridpoints
   nx=NG #in x
-  npart=nx*512
+  npart=nx*200
 
   nsteps=-1
   t_end=t_final

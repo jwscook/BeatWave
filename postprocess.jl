@@ -1,16 +1,25 @@
 using Plots, FFTW, PyCall, Statistics, Plots
 
-function subtractinitialvalue!(x)
-  x .-= x[1]
+defaults = "./scratch/"
+
+dir = length(ARGS) == 0 ? defaults : ARGS
+
+dirs = filter.(isdir, readdir.("./" .* dir, join=true))[1]
+
+dirs = vcat([d .* ["/both/", "/wave1/", "/wave2/", "/null/"] for d in dirs]...)
+
+
+function subtractvalue!(x, y = x[1])
+  x .-= y
 end
 
 NT = 2^10
-for suffix in ("null", "wave1", "wave2", "both")
-  @show dir = "./scratch/" * suffix * "/"
+for dir in dirs
+  @show dir
   
   sdf = pyimport("sdf")
   h = sdf.read(dir * lpad(0, 5, "0") * ".sdf")
-  Ex0 = h.Electric_Field_Ex_averaged.data
+  Ex0 = h.Electric_Field_Ex.data
   NG = length(Ex0)
   F = zeros(NG, NT);
   fEx(h) = h.Electric_Field_Ex_averaged.data
@@ -35,16 +44,23 @@ for suffix in ("null", "wave1", "wave2", "both")
       @warn "Failed to read particle or field energy from $dir at step $i"
     end
   end
-  subtractinitialvalue!(energydensityelectrons)
-  subtractinitialvalue!(energydensityions)
-  subtractinitialvalue!(energydensityfields)
+  #subtractvalue!(energydensityelectrons)
+  #subtractvalue!(energydensityions)
+  #subtractvalue!(energydensityfields)
   energydensitytotal = energydensityelectrons + energydensityions + energydensityfields
-  plot(energydensityelectrons, label="e")
-  plot!(energydensityions, label="i")
-  plot!(energydensityfields, label="f")
-  plot!(energydensitytotal, label="t")
+  @show energydensitytotal[end] ./ energydensitytotal[1]
+  @show energydensitytotal[end] ./ energydensitytotal[1]
+  @show energydensitytotal[end] ./ energydensitytotal[1]
+  energydensitynormalisation = energydensityelectrons[1] + energydensityions[1]
+  plot(energydensityelectrons ./ energydensitynormalisation, label="e")
+  plot!(energydensityions ./ energydensitynormalisation, label="i")
+  plot!(energydensityfields ./ energydensitynormalisation, label="f")
+  plot!(energydensitytotal ./ energydensitynormalisation, label="t")
   savefig(dir * "energydensities.png")
 
+
+  plot((energydensityions .- energydensityions[1]) ./ energydensityions[1])
+  savefig(dir * "ionenergydensities.png")
 
   for (ffield, str) in ((fEx,"Ex"), (fEy, "Ey"), (fEz, "Ez"), (fBy, "By"), (fBz, "Bz"))
     for i in 0:size(F, 2)-1
