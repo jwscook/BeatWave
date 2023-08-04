@@ -8,6 +8,7 @@ else
 fi
 
 mkdir -p $dirname
+cp Polarisation.ipynb $dirname
 mkdir -p $dirname/null
 mkdir -p $dirname/wave1
 mkdir -p $dirname/wave2
