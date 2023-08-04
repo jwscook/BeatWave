@@ -107,15 +107,15 @@ begin:output
 
 #Properties on grid
   grid=always 
-  ex=snapshot
-  ey=snapshot
-  ez=snapshot
-  bx=snapshot
-  by=snapshot
-  bz=snapshot
-  jx=snapshot
-  jy=snapshot
-  jz=snapshot
+  ex=always + average + snapshot
+  ey=always + average + snapshot
+  ez=always + average + snapshot
+  bx=always + average + snapshot
+  by=always + average + snapshot
+  bz=always + average + snapshot
+  jx=always + average + snapshot
+  jy=always + average + snapshot
+  jz=always + average + snapshot
   average_particle_energy=always + species + no_sum
   charge_density=always + snapshot + species + no_sum
   temperature=always + snapshot + species + no_sum
