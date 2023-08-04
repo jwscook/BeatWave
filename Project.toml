@@ -1,5 +1,6 @@
 [deps]
 DSP = "717857b8-e6f2-59f4-9121-6e50c889abd2"
+GR = "28b8d3ca-fb5f-59d9-8090-bfdbd6d07a71"
 IJulia = "7073ff75-c697-5162-941a-fcdaad2a7d2a"
 IntervalArithmetic = "d1acc4aa-44c8-5952-acd4-ba5d80a2a253"
 IntervalRootFinding = "d2bf35a9-74e0-55ec-b149-d360ff49b807"
