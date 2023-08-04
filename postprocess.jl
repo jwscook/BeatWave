@@ -1,12 +1,21 @@
 using Plots, FFTW, PyCall, Statistics, Plots
 
-function subtractinitialvalue!(x)
-  x .-= x[1]
+defaults = "./scratch/"
+
+dir = length(ARGS) == 0 ? defaults : ARGS
+
+dirs = filter.(isdir, readdir.("./" .* dir, join=true))[1]
+
+dirs = vcat([d .* ["/both/", "/wave1/", "/wave2/", "/null/"] for d in dirs]...)
+
+
+function subtractvalue!(x, y = x[1])
+  x .-= y
 end
 
 NT = 2^10
-for suffix in ("null", "wave1", "wave2", "both")
-  @show dir = "./scratch/" * suffix * "/"
+for dir in dirs
+  @show dir
   
   sdf = pyimport("sdf")
   h = sdf.read(dir * lpad(0, 5, "0") * ".sdf")
@@ -36,9 +45,9 @@ for suffix in ("null", "wave1", "wave2", "both")
       @warn "Failed to read particle or field energy from $dir at step $i"
     end
   end
-  subtractinitialvalue!(energydensityelectrons)
-  subtractinitialvalue!(energydensityions)
-  subtractinitialvalue!(energydensityfields)
+  #subtractvalue!(energydensityelectrons)
+  #subtractvalue!(energydensityions)
+  #subtractvalue!(energydensityfields)
   energydensitytotal = energydensityelectrons + energydensityions + energydensityfields
   E0 = Bz0^2 / 2 / (4e-7π)
   plot(energydensityelectrons / E0, label="electrons")
@@ -49,6 +58,9 @@ for suffix in ("null", "wave1", "wave2", "both")
   ylabel!("Energy density change [<B>^2 / 2 mu0]")
   savefig(dir * "energydensities.png")
 
+
+  plot((energydensityions .- energydensityions[1]) ./ energydensityions[1])
+  savefig(dir * "ionenergydensities.png")
 
   for (ffield, str) in ((fEx,"Ex"), (fEy, "Ey"), (fEz, "Ez"), (fBy, "By"), (fBz, "Bz"))
     for i in 0:size(F, 2)-1
